@@ -1,11 +1,16 @@
 import { TripItinerary, Attraction, Hotel } from "@/types/travel";
+import { getAttractionsForDestination, globalHotels } from "./globalDestinations";
 
 export const generateMockItinerary = (destination: string, days: number): TripItinerary => {
-  const attractions: Attraction[] = [
+  // Get attractions for any global destination
+  const baseAttractions = getAttractionsForDestination(destination, []);
+  
+  // Generate dynamic attractions based on destination
+  const attractions: Attraction[] = baseAttractions.length > 0 ? baseAttractions : [
     {
       id: "1",
-      name: "Baga Beach",
-      description: "Popular beach known for water sports and vibrant nightlife",
+      name: `${destination} City Center`,
+      description: "Explore the heart of the city with its main attractions and landmarks",
       rating: 4.5,
       reviews: 2341,
       price: "Free",
@@ -16,8 +21,8 @@ export const generateMockItinerary = (destination: string, days: number): TripIt
     },
     {
       id: "2",
-      name: "Basilica of Bom Jesus",
-      description: "UNESCO World Heritage Site, famous 16th-century church",
+      name: `${destination} Historic Quarter`,
+      description: "UNESCO World Heritage Sites and historical landmarks",
       rating: 4.7,
       reviews: 5632,
       price: "Free",
@@ -28,8 +33,8 @@ export const generateMockItinerary = (destination: string, days: number): TripIt
     },
     {
       id: "3",
-      name: "Dudhsagar Waterfall",
-      description: "Spectacular four-tiered waterfall on the Goa-Karnataka border",
+      name: `${destination} Natural Wonder`,
+      description: "Spectacular natural attractions and scenic viewpoints",
       rating: 4.8,
       reviews: 3421,
       price: "$30",
@@ -40,8 +45,8 @@ export const generateMockItinerary = (destination: string, days: number): TripIt
     },
     {
       id: "4",
-      name: "Calangute Beach",
-      description: "Queen of beaches, perfect for swimming and sunbathing",
+      name: `${destination} Popular District`,
+      description: "Famous area perfect for exploration and entertainment",
       rating: 4.4,
       reviews: 4521,
       price: "Free",
@@ -52,8 +57,8 @@ export const generateMockItinerary = (destination: string, days: number): TripIt
     },
     {
       id: "5",
-      name: "Spice Plantation Tour",
-      description: "Explore aromatic spice gardens with traditional Goan lunch",
+      name: `${destination} Cultural Experience`,
+      description: "Immerse yourself in local culture with traditional experiences",
       rating: 4.6,
       reviews: 1823,
       price: "$25",
@@ -64,8 +69,8 @@ export const generateMockItinerary = (destination: string, days: number): TripIt
     },
     {
       id: "6",
-      name: "Anjuna Flea Market",
-      description: "Vibrant Wednesday market with handicrafts and souvenirs",
+      name: `${destination} Local Market`,
+      description: "Vibrant market with local handicrafts and souvenirs",
       rating: 4.3,
       reviews: 2914,
       price: "Free entry",
@@ -76,8 +81,8 @@ export const generateMockItinerary = (destination: string, days: number): TripIt
     },
     {
       id: "7",
-      name: "Sunset River Cruise",
-      description: "Romantic Mandovi river cruise with live entertainment",
+      name: `${destination} Sunset Experience`,
+      description: "Romantic sunset experience with stunning views",
       rating: 4.5,
       reviews: 1654,
       price: "$20",
@@ -88,8 +93,8 @@ export const generateMockItinerary = (destination: string, days: number): TripIt
     },
     {
       id: "8",
-      name: "Parasailing at Candolim",
-      description: "Thrilling water sport with panoramic coastal views",
+      name: `${destination} Adventure Activity`,
+      description: "Thrilling activities with panoramic views",
       rating: 4.7,
       reviews: 892,
       price: "$40",
@@ -100,28 +105,24 @@ export const generateMockItinerary = (destination: string, days: number): TripIt
     }
   ];
 
-  const hotels: Hotel[] = [
-    {
-      id: "h1",
-      name: "Taj Fort Aguada Resort",
-      rating: 4.8,
-      price: 250,
-      image: "/hotel1.jpg",
-      amenities: ["Pool", "Spa", "Beach Access", "Restaurant"],
-      distance: "2 km",
-      coordinates: { lat: 15.4975, lng: 73.7730 }
-    },
-    {
-      id: "h2",
-      name: "The Leela Goa",
-      rating: 4.7,
-      price: 200,
-      image: "/hotel2.jpg",
-      amenities: ["Golf Course", "Pool", "Spa", "Beach"],
-      distance: "5 km",
-      coordinates: { lat: 15.4632, lng: 73.8341 }
-    }
-  ];
+  // Generate hotels based on destination
+  const hotelTypes = destination.toLowerCase().includes("budget") 
+    ? ["budget", "hostel"] 
+    : ["luxury", "boutique", "business"];
+    
+  const hotels: Hotel[] = globalHotels
+    .filter(h => hotelTypes.includes(h.type))
+    .slice(0, 3)
+    .map((template, index) => ({
+      id: `h${index + 1}`,
+      name: `${destination} ${template.name}`,
+      rating: template.rating,
+      price: Math.floor((template.priceRange.min + template.priceRange.max) / 2),
+      image: "/hotel-placeholder.jpg",
+      amenities: template.amenities,
+      distance: `${(index + 1) * 2} km`,
+      coordinates: { lat: 0, lng: 0 }
+    }));
 
   const dayItineraries = [];
   const activitiesPerDay = 3;
@@ -155,11 +156,16 @@ export const generateMockItinerary = (destination: string, days: number): TripIt
     });
 
     const dayTitles = [
-      "Beach Day & Water Sports",
+      "City Exploration & Landmarks",
       "Cultural Heritage Tour",
-      "Adventure & Nature",
-      "Relaxation & Shopping",
-      "Sunset & Nightlife"
+      "Adventure & Nature Discovery",
+      "Local Markets & Shopping",
+      "Scenic Views & Entertainment",
+      "Food & Culinary Journey",
+      "Day Trip & Excursions",
+      "Museums & Art Galleries",
+      "Relaxation & Wellness",
+      "Nightlife & Entertainment"
     ];
 
     dayItineraries.push({

@@ -33,10 +33,10 @@ export function Hero({ onSearch }: HeroProps) {
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 py-16 text-center">
         <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 animate-fade-in">
-          Plan Your Perfect Journey
+          WorldTravelItinerary
         </h1>
         <p className="text-xl text-white/90 mb-12 max-w-2xl mx-auto">
-          AI-powered travel planning that creates personalized itineraries in seconds
+          Your AI-powered global travel companion for every destination on Earth. Create personalized itineraries for any city, country, or region worldwide.
         </p>
 
         {/* Search Form */}
@@ -46,10 +46,11 @@ export function Hero({ onSearch }: HeroProps) {
               <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground h-5 w-5" />
               <Input
                 type="text"
-                placeholder="Where do you want to go?"
+                placeholder="Enter any destination worldwide (e.g., Tokyo, Paris, New York, Machu Picchu)"
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
                 className="pl-12 h-14 text-base border-0 focus-visible:ring-0"
+                list="global-destinations"
               />
             </div>
             <Button type="submit" variant="ocean" size="xl">
@@ -59,19 +60,43 @@ export function Hero({ onSearch }: HeroProps) {
           </div>
         </form>
 
+        {/* Global Destinations Datalist */}
+        <datalist id="global-destinations">
+          <option value="Tokyo, Japan" />
+          <option value="Paris, France" />
+          <option value="New York, USA" />
+          <option value="London, UK" />
+          <option value="Dubai, UAE" />
+          <option value="Singapore" />
+          <option value="Bangkok, Thailand" />
+          <option value="Rome, Italy" />
+          <option value="Barcelona, Spain" />
+          <option value="Sydney, Australia" />
+          <option value="Istanbul, Turkey" />
+          <option value="Mumbai, India" />
+          <option value="Cairo, Egypt" />
+          <option value="Rio de Janeiro, Brazil" />
+          <option value="Moscow, Russia" />
+          <option value="Seoul, South Korea" />
+          <option value="Mexico City, Mexico" />
+          <option value="Cape Town, South Africa" />
+          <option value="Buenos Aires, Argentina" />
+          <option value="Toronto, Canada" />
+        </datalist>
+
         {/* Quick Stats */}
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
           <div className="text-white">
-            <div className="text-3xl font-bold mb-1">500+</div>
-            <div className="text-white/80">Destinations</div>
+            <div className="text-3xl font-bold mb-1">195+</div>
+            <div className="text-white/80">Countries Covered</div>
           </div>
           <div className="text-white">
-            <div className="text-3xl font-bold mb-1">10K+</div>
-            <div className="text-white/80">Happy Travelers</div>
+            <div className="text-3xl font-bold mb-1">10,000+</div>
+            <div className="text-white/80">Global Destinations</div>
           </div>
           <div className="text-white">
             <div className="text-3xl font-bold mb-1">24/7</div>
-            <div className="text-white/80">AI Planning</div>
+            <div className="text-white/80">Worldwide Planning</div>
           </div>
         </div>
       </div>

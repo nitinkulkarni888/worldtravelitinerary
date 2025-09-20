@@ -102,12 +102,21 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Popular Destinations */}
+      {/* Popular Destinations Worldwide */}
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Popular Destinations</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Explore Global Destinations</h2>
           <div className="grid md:grid-cols-4 gap-6">
-            {["Goa, India", "Paris, France", "Tokyo, Japan", "Bali, Indonesia"].map((place) => (
+            {[
+              "Tokyo, Japan",
+              "Paris, France", 
+              "New York, USA",
+              "Dubai, UAE",
+              "London, UK",
+              "Bali, Indonesia",
+              "Rome, Italy",
+              "Sydney, Australia"
+            ].map((place) => (
               <div 
                 key={place}
                 onClick={() => handleDestinationSearch(place)}

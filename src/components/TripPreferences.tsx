@@ -23,6 +23,12 @@ const travelStyles = [
   { id: "nightlife", label: "Nightlife", icon: "🎉" },
   { id: "nature", label: "Nature & Wildlife", icon: "🦁" },
   { id: "shopping", label: "Shopping", icon: "🛍️" },
+  { id: "wellness", label: "Wellness & Spa", icon: "🧘" },
+  { id: "photography", label: "Photography", icon: "📸" },
+  { id: "historical", label: "Historical Sites", icon: "🏰" },
+  { id: "urban", label: "Urban Exploration", icon: "🏙️" },
+  { id: "offbeat", label: "Off the Beaten Path", icon: "🗺️" },
+  { id: "romantic", label: "Romantic", icon: "💕" },
 ];
 
 const budgetRanges = [
