@@ -5,6 +5,7 @@ import { ItineraryView } from "@/components/ItineraryView";
 import { TravelPreferences, TripItinerary } from "@/types/travel";
 import { generateMockItinerary } from "@/data/mockData";
 import { useToast } from "@/hooks/use-toast";
+import { GoogleAd } from "@/components/GoogleAd";
 
 type AppState = "home" | "preferences" | "itinerary";
 
@@ -51,11 +52,17 @@ const Index = () => {
 
   if (appState === "preferences") {
     return (
-      <TripPreferences
-        destination={destination}
-        onSubmit={handlePreferencesSubmit}
-        onBack={handleBackToHome}
-      />
+      <>
+        <TripPreferences
+          destination={destination}
+          onSubmit={handlePreferencesSubmit}
+          onBack={handleBackToHome}
+        />
+        {/* Ad placement after preferences */}
+        <div className="max-w-7xl mx-auto px-4 mt-8">
+          <GoogleAd slot="1234567890" format="horizontal" />
+        </div>
+      </>
     );
   }
 
@@ -71,6 +78,11 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <Hero onSearch={handleDestinationSearch} />
+      
+      {/* Ad placement after hero */}
+      <div className="container mx-auto px-4 py-8">
+        <GoogleAd slot="2345678901" format="horizontal" />
+      </div>
       
       {/* Features Section */}
       <section className="py-16 bg-background">
@@ -102,6 +114,11 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Ad placement before destinations */}
+      <div className="container mx-auto px-4 py-8">
+        <GoogleAd slot="3456789012" format="rectangle" />
+      </div>
+      
       {/* Popular Destinations Worldwide */}
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
