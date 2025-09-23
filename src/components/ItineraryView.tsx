@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MapPin, Clock, DollarSign, Star, Calendar, Hotel, Car, ArrowRight, Download, Share2, Edit, Plus, Navigation } from "lucide-react";
+import { MapPin, Clock, DollarSign, Star, Calendar, Hotel, Car, ArrowRight, Download, Share2, Edit, Plus, Navigation, MoreVertical, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,8 @@ import { exportItineraryToPDF } from "@/utils/pdfExport";
 import { AttractionSelector } from "./AttractionSelector";
 import { HotelBooking } from "./HotelBooking";
 import { TransportOptions } from "./TransportOptions";
+import { AttractionEditor } from "./AttractionEditor";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface ItineraryViewProps {
   itinerary: TripItinerary;
@@ -23,7 +25,10 @@ export function ItineraryView({ itinerary, onEdit }: ItineraryViewProps) {
   const [showAttractionSelector, setShowAttractionSelector] = useState(false);
   const [showHotelBooking, setShowHotelBooking] = useState(false);
   const [showTransportOptions, setShowTransportOptions] = useState(false);
+  const [showAttractionEditor, setShowAttractionEditor] = useState(false);
   const [selectedDayForEdit, setSelectedDayForEdit] = useState<number | undefined>();
+  const [selectedAttraction, setSelectedAttraction] = useState<Attraction | null>(null);
+  const [selectedActivityIndex, setSelectedActivityIndex] = useState<number | null>(null);
   const [transportRoute, setTransportRoute] = useState({ from: "", to: "" });
   const [updatedItinerary, setUpdatedItinerary] = useState(itinerary);
   const { toast } = useToast();
@@ -80,6 +85,72 @@ export function ItineraryView({ itinerary, onEdit }: ItineraryViewProps) {
   const openTransportForActivity = (from: string, to: string) => {
     setTransportRoute({ from, to });
     setShowTransportOptions(true);
+  };
+
+  const handleEditAttraction = (dayIndex: number, activityIndex: number) => {
+    setSelectedDayForEdit(dayIndex);
+    setSelectedActivityIndex(activityIndex);
+    setSelectedAttraction(updatedItinerary.days[dayIndex].activities[activityIndex].attraction);
+    setShowAttractionEditor(true);
+  };
+
+  const handleSaveAttraction = (attraction: Attraction) => {
+    if (selectedDayForEdit !== undefined && selectedActivityIndex !== null) {
+      const newItinerary = { ...updatedItinerary };
+      newItinerary.days[selectedDayForEdit].activities[selectedActivityIndex].attraction = attraction;
+      setUpdatedItinerary(newItinerary);
+      toast({
+        title: "Attraction Updated",
+        description: `${attraction.name} has been updated successfully`,
+      });
+    }
+  };
+
+  const handleDeleteAttraction = (id: string) => {
+    if (selectedDayForEdit !== undefined && selectedActivityIndex !== null) {
+      const newItinerary = { ...updatedItinerary };
+      newItinerary.days[selectedDayForEdit].activities.splice(selectedActivityIndex, 1);
+      setUpdatedItinerary(newItinerary);
+      toast({
+        title: "Attraction Removed",
+        description: "The attraction has been removed from your itinerary",
+      });
+    }
+  };
+
+  const handleAddCustomAttraction = (dayIndex: number) => {
+    setSelectedDayForEdit(dayIndex);
+    setSelectedActivityIndex(null);
+    setSelectedAttraction({
+      id: `custom-${Date.now()}`,
+      name: "",
+      description: "",
+      rating: 4.5,
+      reviews: 0,
+      price: "Free",
+      duration: "1-2 hours",
+      image: "/custom.jpg",
+      category: "Activity",
+      coordinates: { lat: 0, lng: 0 }
+    });
+    setShowAttractionEditor(true);
+  };
+
+  const handleSaveCustomAttraction = (attraction: Attraction) => {
+    if (selectedDayForEdit !== undefined && selectedActivityIndex === null) {
+      const newItinerary = { ...updatedItinerary };
+      newItinerary.days[selectedDayForEdit].activities.push({
+        time: "TBD",
+        attraction,
+        transport: "To be determined",
+        transportCost: 0
+      });
+      setUpdatedItinerary(newItinerary);
+      toast({
+        title: "Custom Attraction Added",
+        description: `${attraction.name} has been added to your itinerary`,
+      });
+    }
   };
 
   return (
@@ -230,8 +301,16 @@ export function ItineraryView({ itinerary, onEdit }: ItineraryViewProps) {
                         </div>
                       )}
                       
-                      {/* Add Attractions Button */}
-                      <div className="mt-4 flex justify-end">
+                      {/* Add Attractions Buttons */}
+                      <div className="mt-4 flex justify-end gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleAddCustomAttraction(index)}
+                        >
+                          <Plus className="h-4 w-4 mr-1" />
+                          Add Custom
+                        </Button>
                         <Button
                           size="sm"
                           variant="outline"
@@ -241,7 +320,7 @@ export function ItineraryView({ itinerary, onEdit }: ItineraryViewProps) {
                           }}
                         >
                           <Plus className="h-4 w-4 mr-1" />
-                          Add More Attractions
+                          Browse Attractions
                         </Button>
                       </div>
                     </CardContent>
